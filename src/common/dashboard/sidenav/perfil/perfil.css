@@ -1,0 +1,13 @@
+.img-logo {
+  width: 6rem;
+}
+
+.font-texts {
+    font-size: 1.4rem !important;
+}
+
+.change-relative {
+    left: 0rem;
+    right: 0;
+    top: 2.5rem;
+} 

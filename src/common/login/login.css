@@ -1,0 +1,15 @@
+.form-login {
+    padding: 2rem;
+}
+
+.img-logo {
+    background-image: url('../../assets/img/page.svg');
+    background-repeat: no-repeat;
+}
+
+
+.box-card-item {
+    box-shadow: 1px 1px 10px -3px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 1px 1px 10px -3px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 1px 1px 10px -3px rgba(0, 0, 0, 0.75);
+}

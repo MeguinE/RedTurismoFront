@@ -1,0 +1,38 @@
+.sidernav {
+  position: fixed;
+  top: 10rem;
+  left: 0;
+  right: 0;
+  width: 17%;
+}
+
+.sidernav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 1rem;
+  color: white;
+  display: block;
+  transition: 0.3s;
+  margin-top: 1rem;
+}
+
+.sidernav a:hover {
+  background-color: #b4caa3;
+  color: #ae833f !important;
+  opacity: .5;
+}
+
+.fondo-perfil {
+  height: 100%;
+  width: 17%;
+  left: 0;
+  position: fixed;
+  background-color: #675c3e;
+
+}
+
+.active-router {
+  background-color: #b4caa3;
+  color: #ae833f !important;
+  opacity: .5;
+}
