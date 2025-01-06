@@ -10,27 +10,30 @@ import Estatutos from './components/admin/estutos/estatutos';
 import Eventos from './common/eventos/eventos';
 import Socios from './components/admin/socios/socios';
 import Pagos from './components/admin/pagos/pagos';
+import { SociosProvider } from './context/SociosContext'; // Importa el contexto
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* path principal para el login */}
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="" element={<Tablero />} />
-          <Route path='usuario' element={<Usuario />} />
-          <Route path="finanzas" element={<Finanzas />} />
-          <Route path="asistencia" element={<Asistencia />} />
-          <Route path="calendario" element={<Calendario />} />
-          <Route path="estatutos" element={<Estatutos />} />
-          <Route path='eventos' element={<Eventos />} />
-          <Route path='socios' element={<Socios />} />
-          <Route path='pago' element={<Pagos />} />
-        </Route>
-      </Routes>
-    </Router>
-  )
+    <SociosProvider> {/* Envuelve todo el Router con el SociosProvider */}
+      <Router>
+        <Routes>
+          {/* path principal para el login */}
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="" element={<Tablero />} />
+            <Route path='usuario' element={<Usuario />} />
+            <Route path="finanzas" element={<Finanzas />} />
+            <Route path="asistencia" element={<Asistencia />} />
+            <Route path="calendario" element={<Calendario />} />
+            <Route path="estatutos" element={<Estatutos />} />
+            <Route path='eventos' element={<Eventos />} />
+            <Route path='socios' element={<Socios />} />
+            <Route path='pago' element={<Pagos />} />
+          </Route>
+        </Routes>
+      </Router>
+    </SociosProvider>
+  );
 }
 
-export default App
+export default App;

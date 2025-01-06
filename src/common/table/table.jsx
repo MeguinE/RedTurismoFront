@@ -1,47 +1,54 @@
-import Table from 'react-bootstrap/Table';
-// ----
-import { BsPencilSquare } from "react-icons/bs";
-import { BsTrash3 } from "react-icons/bs";
-// ---
-import { Fragment } from 'react';
+import React from 'react';
+import { BsPencilSquare } from 'react-icons/bs';
+import { BsTrash3 } from 'react-icons/bs';
+import { Table } from 'react-bootstrap';
 
-const Tables = () => {
-    return (
-        <Fragment>
-            <Table striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>NOMBRE</th>
-                        <th>EMPRESA</th>
-                        <th>RFC</th>
-                        <th>NR</th>
-                        <th>TELEFONO</th>
-                        <th>DOMICILIO</th>
-                        <th>ZONA</th>
-                        <th>ESTATUS</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <th>GUILLERMO</th>
-                        <th>ITSZ</th>
-                        <th>DIRMDKF090L1</th>
-                        <th>-</th>
-                        <th>0123456789</th>
-                        <th>USULO GALVAN</th>
-                        <th>JALAPILLA</th>
-                        <th>PENDIENTE</th>
-                        <th><BsPencilSquare /></th>
-                        <th><BsTrash3 /></th>
-                    </tr>
-                </tbody>
-            </Table>
-        </Fragment>
-    )
-}
+const Tables = ({ socios }) => {
+
+  if (!socios || socios.length === 0) {
+    return <p>No hay socios registrados.</p>;
+  }
+
+  return (
+    <Table striped bordered hover size="sm">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Empresa</th>
+          <th>RFC</th>
+          <th>NR</th>
+          <th>Teléfono</th>
+          <th>Domicilio</th>
+          <th>Zona</th>
+          <th>Estatus</th>
+          <th>Modificar</th>
+          <th>Baja</th>
+        </tr>
+      </thead>
+      <tbody>
+        {socios.map((socio) => (
+          <tr key={socio.id_socio}>
+            <td>{socio.id_socio}</td>
+            <td>{socio.nombre}</td>
+            <td>{socio.empresa}</td>
+            <td>{socio.rfc}</td>
+            <td>{socio.rnt}</td>
+            <td>{socio.telefono}</td>
+            <td>{socio.domicilio}</td>
+            <td>{socio.lugar_desarrollo}</td>
+            <td>{socio.estado}</td>
+            <td>
+              <BsPencilSquare />
+            </td>
+            <td>
+              <BsTrash3 />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+};
 
 export default Tables;
