@@ -1,4 +1,3 @@
-// components/admin/socios/Socios.jsx
 import { useEffect, useState, Fragment } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
-import axios from 'axios'; 
+import axios from 'axios';
 import { useSocios } from '../../../context/SociosContext'; // Usa el contexto para manejar los socios
 import Tables from '../../../common/table/table'; // Componente para mostrar la tabla
 import './socios.css';
@@ -18,11 +17,16 @@ const Socios = () => {
     apellidos: '',
     domicilio: '',
     telefono: '',
-    email: '',
+    correo_electronico: '', // Cambiado de 'email' a 'correo_electronico'
     rnt: '',
     rfc: '',
     empresa: '',
-    lugar: '',
+    lugar_desarrollo: '', // Cambiado de 'lugar' a 'lugar_desarrollo'
+    estado: '',
+    usuario: '',
+    contrasena: '',
+    rol: '',
+    fecha_registro: '',
   });
 
   // Función para cargar los datos de socios desde el backend
@@ -43,7 +47,7 @@ const Socios = () => {
   // Cargar los datos cuando el componente se monta
   useEffect(() => {
     cargarSocios();
-  }, []); 
+  }, []);
 
   // Manejar el cambio de valores en el formulario
   const handleInputChange = (e) => {
@@ -54,9 +58,59 @@ const Socios = () => {
     });
   };
 
+  const handleBaja = async (id_socio) => {
+    try {
+      const token = localStorage.getItem('token'); // Obtener el token desde localStorage
+      const response = await axios.delete(`http://127.0.0.1:8000/api/users/${id_socio}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Enviar el token en la cabecera
+        },
+      });
+      if (response.status === 200) {
+        const updatedSocios = socios.filter((socio) => socio.id_socio !== id_socio);
+        actualizarSocios(updatedSocios);// Recarga los socios después de dar de baja uno
+      }
+    } catch (error) {
+      console.error('Error al dar de baja socio:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handleEditar = async (id_socio) => {
+    try {
+      const token = localStorage.getItem('token'); // Obtener el token desde localStorage
+      const response = await axios.put(`http:///127.0.0.1:8000/api/users/${formData.id_socio}`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Enviar el token en la cabecera
+        },
+      });
+      if (response.status === 200){
+        cargarSocios(); // Recarga los socios después de editar uno
+        setFormData({
+          nombre: '',
+          apellidos: '',
+          domicilio: '',
+          telefono: '',
+          correo_electronico: '',
+          rnt: '',
+          rfc: '',
+          empresa: '',
+          lugar_desarrollo: '',
+          estado: '',
+          usuario: '',
+          contrasena: '',
+          rol: '',
+          fecha_registro: '', 
+      });}
+    }
+    catch (error) {
+      console.error('Error al editar socio:', error.response ? error.response.data : error.message);
+    }
+  };
   // Manejar el registro de un nuevo socio
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form data before sending:", formData); // Verifica los datos antes de enviarlos
     try {
       const token = localStorage.getItem('token'); // Obtener el token desde localStorage
       const response = await axios.post('http://127.0.0.1:8000/api/users', formData, {
@@ -65,6 +119,7 @@ const Socios = () => {
           'Authorization': `Bearer ${token}`, // Enviar el token en la cabecera
         },
       });
+      console.log("Response:", response); // Verifica la respuesta
       if (response.status === 201) {
         cargarSocios(); // Recarga los socios después de registrar uno nuevo
         setFormData({
@@ -72,50 +127,20 @@ const Socios = () => {
           apellidos: '',
           domicilio: '',
           telefono: '',
-          email: '',
+          correo_electronico: '',
           rnt: '',
           rfc: '',
           empresa: '',
-          lugar: '',
+          lugar_desarrollo: '',
+          estado: '',
+          usuario: '',
+          contrasena: '',
+          rol: '',
+          fecha_registro: '',
         });
       }
     } catch (error) {
       console.error('Error al registrar socio:', error.response ? error.response.data : error.message);
-    }
-  };
-
-  // Función para manejar baja de socio
-  const handleBaja = async (id) => {
-    try {
-      const token = localStorage.getItem('token'); // Obtener el token desde localStorage
-      const response = await axios.delete(`http://127.0.0.1:8000/api/users/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`, // Enviar el token en la cabecera
-        },
-      });
-      if (response.status === 200) {
-        cargarSocios(); // Recarga los socios después de dar de baja uno
-      }
-    } catch (error) {
-      console.error('Error al dar de baja socio:', error.response ? error.response.data : error.message);
-    }
-  };
-
-  // Función para manejar modificación de socio
-  const handleModificar = async () => {
-    try {
-      const token = localStorage.getItem('token'); // Obtener el token desde localStorage
-      const response = await axios.put(`http://127.0.0.1:8000/api/users/${formData.id_socio}`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Enviar el token en la cabecera
-        },
-      });
-      if (response.status === 200) {
-        cargarSocios(); // Recarga los socios después de modificar
-      }
-    } catch (error) {
-      console.error('Error al modificar socio:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -179,13 +204,13 @@ const Socios = () => {
                 </Row>
                 <Row>
                   <Col>
-                    <FloatingLabel controlId="email" label="Email" className="mb-3">
+                    <FloatingLabel controlId="correo_electronico" label="Correo Electrónico" className="mb-3">
                       <Form.Control
-                        type="text"
-                        name="email"
-                        value={formData.email}
+                        type="email"
+                        name="correo_electronico"
+                        value={formData.correo_electronico}
                         onChange={handleInputChange}
-                        placeholder="Email"
+                        placeholder="Correo Electrónico"
                       />
                     </FloatingLabel>
                   </Col>
@@ -227,13 +252,79 @@ const Socios = () => {
                 </Row>
                 <Row>
                   <Col>
-                    <FloatingLabel controlId="lugar" label="Lugar de desarrollo" className="mb-3">
+                    <FloatingLabel controlId="lugar_desarrollo" label="Lugar de Desarrollo" className="mb-3">
                       <Form.Control
                         type="text"
-                        name="lugar"
-                        value={formData.lugar}
+                        name="lugar_desarrollo"
+                        value={formData.lugar_desarrollo}
                         onChange={handleInputChange}
-                        placeholder="Lugar de desarrollo"
+                        placeholder="Lugar de Desarrollo"
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+                {/* Campos nuevos */}
+                <Row>
+                  <Col>
+                    <FloatingLabel controlId="estado" label="Estado" className="mb-3">
+                      <Form.Control
+                        type="text"
+                        name="estado"
+                        value={formData.estado}
+                        onChange={handleInputChange}
+                        placeholder="Estado"
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FloatingLabel controlId="usuario" label="Usuario" className="mb-3">
+                      <Form.Control
+                        type="text"
+                        name="usuario"
+                        value={formData.usuario}
+                        onChange={handleInputChange}
+                        placeholder="Usuario"
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FloatingLabel controlId="contrasena" label="Contraseña" className="mb-3">
+                      <Form.Control
+                        type="password"
+                        name="contrasena"
+                        value={formData.contrasena}
+                        onChange={handleInputChange}
+                        placeholder="Contraseña"
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FloatingLabel controlId="rol" label="Rol" className="mb-3">
+                      <Form.Control
+                        type="text"
+                        name="rol"
+                        value={formData.rol}
+                        onChange={handleInputChange}
+                        placeholder="Rol"
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FloatingLabel controlId="fecha_registro" label="Fecha de registro" className="mb-3">
+                      <Form.Control
+                        type="date"
+                        name="fecha_registro"
+                        value={formData.fecha_registro}
+                        onChange={handleInputChange}
+                        placeholder="Fecha de registro"
                       />
                     </FloatingLabel>
                   </Col>
@@ -246,25 +337,33 @@ const Socios = () => {
                   </Col>
                   <Col>
                     <Button
-                      variant="danger"
-                      className="d-grid gap-2 mt-5"
-                      onClick={() => handleBaja(formData.id_socio)}
-                    >
+                      variant='danger'
+                      className='"d-grid gap-2 mt-5'
+                      onClick={() => handleBaja.id_socio}>
                       Baja
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="warning" className="d-grid gap-2 mt-5" onClick={handleModificar}>
+                    <Button
+                      variant='warning'
+                      className='"d-grid gap-2 mt-5'
+                      onClick={() => handleEditar}>
                       Modificar
                     </Button>
                   </Col>
+
                 </Row>
               </Form>
             </Card.Body>
           </Card>
         </Col>
         <Col xs={7}>
-          <Tables socios={socios} /> {/* Pasa los socios al componente de tabla */}
+          <Tables
+            socios={socios}
+            handleEditar={(socio) => setFormData(socio)}  // Para editar, pasa los datos al formulario
+            handleBaja={handleBaja}
+          />
+
         </Col>
       </Row>
     </Fragment>

@@ -3,8 +3,7 @@ import { BsPencilSquare } from 'react-icons/bs';
 import { BsTrash3 } from 'react-icons/bs';
 import { Table } from 'react-bootstrap';
 
-const Tables = ({ socios }) => {
-
+const Tables = ({ socios, handleEditar, handleBaja }) => {
   if (!socios || socios.length === 0) {
     return <p>No hay socios registrados.</p>;
   }
@@ -22,6 +21,8 @@ const Tables = ({ socios }) => {
           <th>Domicilio</th>
           <th>Zona</th>
           <th>Estatus</th>
+          <th>Usuario</th>
+          <th>Rol</th>
           <th>Modificar</th>
           <th>Baja</th>
         </tr>
@@ -38,11 +39,13 @@ const Tables = ({ socios }) => {
             <td>{socio.domicilio}</td>
             <td>{socio.lugar_desarrollo}</td>
             <td>{socio.estado}</td>
+            <td>{socio.usuario}</td>
+            <td>{socio.rol}</td>
             <td>
-              <BsPencilSquare />
+              <BsPencilSquare onClick={() => handleEditar(socio)} style={{ cursor: 'pointer' }} />
             </td>
             <td>
-              <BsTrash3 />
+              <BsTrash3 onClick={() => handleBaja(socio.id_socio)} style={{ cursor: 'pointer' }} />
             </td>
           </tr>
         ))}
